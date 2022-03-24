@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:bill_tracker/models/Representative.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../common_widgets/custom_raised_button.dart';
 import '../services/auth.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +16,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Representative>> futureReps;
+
+  void fetchRepProfile(){
+
+  }
   @override
   void initState() {
 
@@ -36,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     if (response.statusCode == 200) {
 
       final body = jsonDecode(response.body);
+      print(response.body);
      List<dynamic> repList  = body['results'];
 
       List<Representative> reps = repList
@@ -43,7 +48,7 @@ class _HomePageState extends State<HomePage> {
             (dynamic item) => Representative.fromJson(item),
       )
           .toList();
-      print(reps);
+
       return reps;
     } else {
       // If the server did not return a 200 OK response,
@@ -65,28 +70,41 @@ class _HomePageState extends State<HomePage> {
 
               ],
             )),
-        body: Container(
-          child: FutureBuilder<List<Representative>>(
-            future: futureReps,
-              builder: (BuildContext context, AsyncSnapshot<List<Representative>> snapshot) {
-                if (snapshot.hasData) {
-                  List<Representative>? reps = snapshot.data;
-                  return ListView(
-                    children: reps!
-                        .map(
-                          (Representative rep) => ListTile(
-                        title: Text(rep.name),
-                        subtitle: Text("${rep.id}"),
-                      ),
-                    )
-                        .toList(),
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              }
-          )
+        body: FutureBuilder<List<Representative>>(
+          future: futureReps,
+            builder: (BuildContext context, AsyncSnapshot<List<Representative>> snapshot) {
+              if (snapshot.hasData) {
+                List<Representative>? reps = snapshot.data;
+                return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children:[
 
+                  const Text("Your Reps",style: TextStyle(fontSize: 20),),
+                const SizedBox(height: 10),
+                Row(
+                children: reps!
+                    .map(
+                    (Representative rep) => Card(
+                      color: Colors.white70,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.network("https://theunitedstates.io/images/congress/original/"+rep.id+".jpg",
+                          height: 100.0, width: 100.0,),
+                        const SizedBox(height: 5),
+                        CustomRaisedButton(child:Text(rep.name),color: Colors.blue,onPressed: fetchRepProfile,)
+                      ],
+                    )
+                ),
+              )
+                  .toList(),
+              )
+                ]);
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            }
         )
     );
   }

@@ -44,9 +44,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
                 .now()
                 .millisecondsSinceEpoch,
             "role":"customer",
-            "uid": result?.uid,
-            "rating": 0.0,
-            "reviews":0
+            "uid": result?.uid
           });
           /*await _users.add({
             "name": name,
