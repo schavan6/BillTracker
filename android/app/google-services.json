@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "758569299108",
+    "project_id": "billtracker-4d9f3",
+    "storage_bucket": "billtracker-4d9f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:758569299108:android:ed26338d2b3e1b72cb4a31",
+        "android_client_info": {
+          "package_name": "com.example.bill_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "758569299108-36eq3c5l17u58k7l330hajd156nbe0gh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bill_tracker",
+            "certificate_hash": "2b87c4dbc0d9c2b36f31d37c54e55c366dde2ba1"
+          }
+        },
+        {
+          "client_id": "758569299108-q8hsolgokuelnb987515rhnq4es5cq2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8EnyWlxcygDAuZjN3zp4NZ6M3AOkw3pg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "758569299108-q8hsolgokuelnb987515rhnq4es5cq2s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
