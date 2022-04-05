@@ -24,7 +24,6 @@ class Representative {
   );
 
   factory Representative.fromJson(Map<String, dynamic> json) {
-    print(json);
     Representative val = Representative('id','name');
     try{
       val = Representative(
@@ -40,10 +39,11 @@ class Representative {
           json['api_uri'] ?? ''
       );
     }catch(e){
+      print("rep e");
       print(e);
     }
 
-    print(val);
+
     return val;
   }
 }

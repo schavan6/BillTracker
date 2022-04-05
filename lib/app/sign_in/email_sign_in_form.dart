@@ -1,5 +1,6 @@
 import 'package:bill_tracker/common_widgets/form_submit_button.dart';
 import 'package:bill_tracker/services/auth.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,10 +18,14 @@ class EmailSignInForm extends StatefulWidget {
 }
 
 class _EmailSignInFormState extends State<EmailSignInForm> {
+
+  String? countryValue = "";
+  String? stateValue = "";
+  String? cityValue = "";
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
 
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
 
@@ -106,6 +111,97 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
           decoration: const InputDecoration(
           labelText: 'Name',
       ),
+
+
+      ),
+
+      CSCPicker(
+        ///Enable disable state dropdown [OPTIONAL PARAMETER]
+        showStates: true,
+
+        /// Enable disable city drop down [OPTIONAL PARAMETER]
+        showCities: true,
+
+        ///Enable (get flag with country name) / Disable (Disable flag) / ShowInDropdownOnly (display flag in dropdown only) [OPTIONAL PARAMETER]
+        flagState: CountryFlag.DISABLE,
+
+        ///Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER] (USE with disabledDropdownDecoration)
+        dropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.white,
+            border:
+            Border.all(color: Colors.grey.shade300, width: 1)),
+
+        ///Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
+        disabledDropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.grey.shade300,
+            border:
+            Border.all(color: Colors.grey.shade300, width: 1)),
+
+        ///placeholders for dropdown search field
+        countrySearchPlaceholder: "Country",
+        stateSearchPlaceholder: "State",
+        citySearchPlaceholder: "City",
+
+        ///labels for dropdown
+        countryDropdownLabel: "*Country",
+        stateDropdownLabel: "*State",
+        cityDropdownLabel: "*City",
+
+        ///Default Country
+        //defaultCountry: DefaultCountry.India,
+
+        ///Disable country dropdown (Note: use it with default country)
+        //disableCountry: true,
+
+        ///selected item style [OPTIONAL PARAMETER]
+        selectedItemStyle: TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+        ),
+
+        ///DropdownDialog Heading style [OPTIONAL PARAMETER]
+        dropdownHeadingStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 17,
+            fontWeight: FontWeight.bold),
+
+        ///DropdownDialog Item style [OPTIONAL PARAMETER]
+        dropdownItemStyle: TextStyle(
+          color: Colors.black,
+          fontSize: 14,
+        ),
+
+        ///Dialog box radius [OPTIONAL PARAMETER]
+        dropdownDialogRadius: 10.0,
+
+        ///Search bar radius [OPTIONAL PARAMETER]
+        searchBarRadius: 10.0,
+
+        ///triggers once country selected in dropdown
+        onCountryChanged: (value) {
+          setState(() {
+            ///store value in country variable
+            countryValue = value;
+          });
+        },
+
+        ///triggers once state selected in dropdown
+        onStateChanged: (value) {
+          setState(() {
+            ///store value in state variable
+            stateValue = value;
+          });
+        },
+
+        ///triggers once city selected in dropdown
+        onCityChanged: (value) {
+          setState(() {
+            ///store value in city variable
+            cityValue = value;
+          });
+        },
       ),
       const SizedBox(height: 8.0),
       FormSubmitButton(
