@@ -43,6 +43,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         final String name = _nameController.text;
         if (name != null) {
           result?.updateDisplayName(_nameController.text);
+
           await _users.doc(result?.uid).set({
             "name": name,
             "created_on": DateTime
@@ -51,14 +52,6 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
             "role":"customer",
             "uid": result?.uid
           });
-          /*await _users.add({
-            "name": name,
-            "created_on": DateTime
-                .now()
-                .millisecondsSinceEpoch,
-            "role":"customer",
-            "uid": result.uid
-          });*/
 
           // Clear the text fields
           _emailController.text = '';

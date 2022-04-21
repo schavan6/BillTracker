@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:bill_tracker/models/Representative.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../common_widgets/custom_raised_button.dart';
 import '../models/Bill.dart';
 import '../services/auth.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:math';
+
+import 'BillList.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.auth}) : super(key: key);
@@ -45,7 +49,7 @@ class _HomePageState extends State<HomePage> {
       try{
           final body = jsonDecode(response.body);
           billList  = body['results'][0]['bills'];
-          debugPrint(response.body.toString());
+          //debugPrint(response.body.toString());
 
         }catch(e){
           print(e);
@@ -95,6 +99,14 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load reps');
     }
   }
+  void _showBillList(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => BillList(auth: widget.auth, futureBills: futureBills,),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +120,8 @@ class _HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.first_page, size: 30)),
 
               ],
-            )),
+            )
+        ),
         body:
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,20 +162,73 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
             ),
+            const SizedBox(height: 10),
             FutureBuilder<List<Bill>>(
                 future: futureBills,
                 builder: (BuildContext context, AsyncSnapshot<List<Bill>> snapshot) {
                   if (snapshot.hasData) {
                     List<Bill>? bills = snapshot.data;
-                    print(bills![0].bill_id);
+                    Random random = Random();
+                    int randomNumber = random.nextInt(20);
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:[
-                          const Text("Bills",style: TextStyle(fontSize: 20),),
+                          Row(
+                            children: [
+                              const Text("Bills",style: TextStyle(fontSize: 20),),
+                              const SizedBox(width: 10),
+                              RichText(
+                                text: TextSpan(text:"See All",
+                                  style: TextStyle(fontSize: 10, color: Colors.blue),
+                                  recognizer: new TapGestureRecognizer()
+                                    ..onTap = () {
+                                      _showBillList(context);
+                                    },
+
+                                )
+                              ),
+
+                            ],
+                          ),
+
                           const SizedBox(height: 10),
                           Card(
-                            color: Colors.white70,
-                            child: Text(bills![0].title)
+                            color: Colors.white,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children:[
+                                  Row(
+                                    children: [
+                                    const Icon(Icons.calendar_today, size: 20),
+                                      SizedBox(width: 10,),
+                                      Text(bills![randomNumber].introduced_date ?? '')
+                                    ]
+                                  ),
+                                  const SizedBox(height: 10,),
+                                  Text(bills![randomNumber].short_title,style: TextStyle(fontWeight: FontWeight.bold),),
+                                  const SizedBox(height: 10,),
+                                  Text(bills![randomNumber].title),
+                                  const SizedBox(height: 10,),
+                                  Text("Sponsored By :",style: TextStyle(fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      ClipRRect(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                        child: Image.network("https://theunitedstates.io/images/congress/original/"+bills![randomNumber].sponsor_id!+".jpg",
+                                          height: 70.0, width: 70.0,),
+                                      ),
+
+                                      Text(bills![randomNumber].sponsor_name!)
+
+                                    ],
+                                  )
+
+
+                                ]
+
+
+                             )
                           )
                         ]);
                   } else {
