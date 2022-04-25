@@ -10,6 +10,7 @@ import '../services/auth.dart';
 import 'dart:math';
 
 import 'BillList.dart';
+import 'RepProfile.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -25,7 +26,12 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Bill>> futureBills;
 
   void fetchRepProfile(String id){
-    print(id);
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => RepProfile(auth: widget.auth, repId: id,),
+      ),
+    );
   }
   @override
   void initState() {

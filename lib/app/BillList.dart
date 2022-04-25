@@ -54,23 +54,25 @@ class _BillListState extends State<BillList> {
       String prevLikedBills = likedBills.join(',');
       prevLikedBills = prevLikedBills + ',' + bill_id;
 
-      _users
-          .doc(widget.auth.currentUser?.uid)
-          .update({'likedBills': prevLikedBills});
       likedBills.add(bill_id);
       setState(() {
         likedBills;
       });
-    } else {
-      likedBills.remove(bill_id);
-      String newLikedBills = likedBills.join(",");
       _users
           .doc(widget.auth.currentUser?.uid)
-          .update({'likedBills': newLikedBills});
+          .update({'likedBills': prevLikedBills, 'likedBillsNumber' : likedBills.length});
 
+    } else {
+      likedBills.remove(bill_id);
       setState(() {
         likedBills;
       });
+      String newLikedBills = likedBills.join(",");
+      _users
+          .doc(widget.auth.currentUser?.uid)
+          .update({'likedBills': newLikedBills,'likedBillsNumber' : likedBills.length });
+
+
     }
   }
 
@@ -79,23 +81,26 @@ class _BillListState extends State<BillList> {
       String prevDisikedBills = dislikedBills.join(',');
       prevDisikedBills = prevDisikedBills + ',' + bill_id;
 
-      _users
-          .doc(widget.auth.currentUser?.uid)
-          .update({'dislikedBills': prevDisikedBills});
       dislikedBills.add(bill_id);
       setState(() {
         dislikedBills;
       });
-    } else {
-      dislikedBills.remove(bill_id);
-      String newDislikedBills = dislikedBills.join(",");
+
       _users
           .doc(widget.auth.currentUser?.uid)
-          .update({'dislikedBills': newDislikedBills});
+          .update({'dislikedBills': prevDisikedBills, 'dislikedBillsNumber':dislikedBills.length});
 
+    } else {
+      dislikedBills.remove(bill_id);
       setState(() {
         dislikedBills;
       });
+      String newDislikedBills = dislikedBills.join(",");
+      _users
+          .doc(widget.auth.currentUser?.uid)
+          .update({'dislikedBills': newDislikedBills,'dislikedBillsNumber':dislikedBills.length});
+
+
     }
   }
 
