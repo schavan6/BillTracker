@@ -161,9 +161,11 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+
                 IconButton(
                     onPressed: () => widget.auth.signOut(),
                     icon: const Icon(Icons.first_page, size: 30)),
+                Text("BillTracker"),
                 IconButton(
                     onPressed: () => {},
                     icon: const Icon(Icons.person_outline_rounded, size: 30)),

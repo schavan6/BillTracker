@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Bill.dart';
+import 'CommentScreen.dart';
 
 class BillList extends StatefulWidget {
   BillList({required this.auth, required this.futureBills});
@@ -103,7 +104,16 @@ class _BillListState extends State<BillList> {
 
     }
   }
+  void _showCommentScreen(String bill_id){
 
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => CommentScreen(auth: widget.auth, bill_id: bill_id),
+      ),
+    );
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +252,7 @@ class _BillListState extends State<BillList> {
                                               }),
                                           IconButton(
                                               onPressed: () =>
-                                              {},
+                                              {_showCommentScreen(bill.bill_id)},
                                               icon: const Icon(Icons.comment,
                                                       size: 15)
                                           )

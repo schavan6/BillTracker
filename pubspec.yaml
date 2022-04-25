@@ -35,6 +35,7 @@ dependencies:
   cloud_firestore: ^1.0.1
   http: ^0.13.4
   csc_picker: ^0.2.6
+  bubble: ^1.1.9+1
 
 
   # The following adds the Cupertino Icons font to your application.
