@@ -189,7 +189,7 @@ class _BillListState extends State<BillList> {
                                                               size: 15)
                                                           : const Icon(
                                                               Icons
-                                                                  .thumb_up_outlined,
+                                                                    .thumb_up_outlined,
                                                               size: 15));
                                                 } else {
                                                   return IconButton(

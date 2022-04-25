@@ -26,6 +26,8 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+
 
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
 
@@ -41,11 +43,13 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         User? result = await widget.auth.createUserWithEmailAndPassword(_email, _password);
 
         final String name = _nameController.text;
+        final String desc = _descController.text;
         if (name != null) {
           result?.updateDisplayName(_nameController.text);
 
           await _users.doc(result?.uid).set({
             "name": name,
+            "desc": desc,
             "created_on": DateTime
                 .now()
                 .millisecondsSinceEpoch,
@@ -99,16 +103,22 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
         obscureText: true,
       ),
       SizedBox(height: 8.0),
-      if(_formType == EmailSignInFormType.register) TextField(
+      if(_formType == EmailSignInFormType.register)
+        TextField(
           controller: _nameController,
           decoration: const InputDecoration(
           labelText: 'Name',
+        ),
       ),
+      if(_formType == EmailSignInFormType.register)
+        TextField(
+          controller: _descController,
+          decoration: const InputDecoration(
+            labelText: 'Profile Description',
+          ),
+        ),
 
-
-      ),
-
-      CSCPicker(
+      /*CSCPicker(
         ///Enable disable state dropdown [OPTIONAL PARAMETER]
         showStates: true,
 
@@ -195,7 +205,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
             cityValue = value;
           });
         },
-      ),
+      )*/
       const SizedBox(height: 8.0),
       FormSubmitButton(
         text: primaryText,

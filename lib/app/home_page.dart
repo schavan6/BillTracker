@@ -24,8 +24,8 @@ class _HomePageState extends State<HomePage> {
   late Future<List<Representative>> futureReps;
   late Future<List<Bill>> futureBills;
 
-  void fetchRepProfile(){
-
+  void fetchRepProfile(String id){
+    print(id);
   }
   @override
   void initState() {
@@ -118,6 +118,9 @@ class _HomePageState extends State<HomePage> {
                 IconButton(
                     onPressed: () => widget.auth.signOut(),
                     icon: const Icon(Icons.first_page, size: 30)),
+                IconButton(
+                    onPressed: () => {},
+                    icon: const Icon(Icons.person_outline_rounded, size: 30)),
 
               ],
             )
@@ -149,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                       Image.network("https://theunitedstates.io/images/congress/original/"+rep.id+".jpg",
                                         height: 100.0, width: 100.0,),
                                       const SizedBox(height: 5),
-                                      CustomRaisedButton(child:Text(rep.name),color: Colors.blue,onPressed: fetchRepProfile,)
+                                      CustomRaisedButton(child:Text(rep.name),color: Colors.blue,onPressed:()=>{ fetchRepProfile(rep.id)},)
                                     ],
                                   )
                               ),
