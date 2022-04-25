@@ -184,19 +184,25 @@ class _HomePageState extends State<HomePage> {
                     return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:[
+                          Row(
+                            children: [
+                              const Text("Your Reps",style: TextStyle(fontSize: 20),),
+                              const SizedBox(width: 10),
+                              RichText(
+                                  text: TextSpan(text:"See All",
+                                    style: TextStyle(fontSize: 10, color: Colors.blue),
+                                    recognizer: new TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _showRepsList(context);
+                                      },
 
-                          const Text("Your Reps",style: TextStyle(fontSize: 20),),
-                          const SizedBox(height: 10),
-                          RichText(
-                              text: TextSpan(text:"See All",
-                                style: TextStyle(fontSize: 10, color: Colors.blue),
-                                recognizer: new TapGestureRecognizer()
-                                  ..onTap = () {
-                                    _showRepsList(context);
-                                  },
+                                  )
+                              ),
 
-                              )
+                            ],
                           ),
+
+
                           Row(
                             children: reps!
                                 .map(

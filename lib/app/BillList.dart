@@ -104,6 +104,7 @@ class _BillListState extends State<BillList> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,6 +120,7 @@ class _BillListState extends State<BillList> {
                   (BuildContext context, AsyncSnapshot<List<Bill>> snapshot) {
                 if (snapshot.hasData) {
                   List<Bill>? bills = snapshot.data;
+                  print(bills);
 
                   return SingleChildScrollView(
                     child: Column(

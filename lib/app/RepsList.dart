@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../common_widgets/custom_raised_button.dart';
 import '../models/Representative.dart';
+import 'RepProfile.dart';
 
 class RepsList extends StatefulWidget {
   RepsList({required this.auth, required this.futureReps});
@@ -23,8 +24,13 @@ class _RepsListState extends State<RepsList> {
     // likedBillsFuture = _getLikedBills();
   }
 
-  void fetchRepProfile(){
-
+  void fetchRepProfile(String id) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => RepProfile(auth: widget.auth, repId: id),
+      ),
+    );
   }
 
   @override
@@ -38,8 +44,8 @@ class _RepsListState extends State<RepsList> {
           padding: const EdgeInsets.all(16.0),
           child: FutureBuilder<List<Representative>>(
               future: widget.futureReps,
-              builder:
-                  (BuildContext context, AsyncSnapshot<List<Representative>> snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<Representative>> snapshot) {
                 if (snapshot.hasData) {
                   List<Representative>? reps = snapshot.data;
 
@@ -48,27 +54,39 @@ class _RepsListState extends State<RepsList> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: reps!
                               .map((Representative rep) => Card(
-                              color: Colors.white,
-                              child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    Row(children: [
-                                      Expanded(child: Image.network("https://theunitedstates.io/images/congress/original/" +rep.id+ ".jpg",
-                                        height: 100.0, width: 100.0,)),
-                                      const SizedBox(height: 5),
-                                      CustomRaisedButton(child:Text(rep.name),color: Colors.blue,onPressed: fetchRepProfile,)
-
-                                    ],)
-                                  ]
-                              )
-                          )).toList())
-                  );
+                                  color: Colors.white,
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const SizedBox(width: 15),
+                                            ClipRRect(
+                                              borderRadius:
+                                              BorderRadius.circular(50.0),
+                                              child: Image.network(
+                                                "https://theunitedstates.io/images/congress/original/" +
+                                                    rep.id +
+                                                    ".jpg",
+                                                height: 70.0,
+                                                width: 70.0,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 20),
+                                            CustomRaisedButton(
+                                              child: Text(rep.name),
+                                              color: Colors.blue,
+                                              onPressed: ()=>{fetchRepProfile(rep.id)},
+                                            )
+                                          ],
+                                        )
+                                      ])))
+                              .toList()));
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
-              }))
-      ,
+              })),
       backgroundColor: Colors.grey[200],
     );
   }
