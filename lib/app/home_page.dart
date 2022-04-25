@@ -10,6 +10,7 @@ import '../services/auth.dart';
 import 'dart:math';
 
 import 'BillList.dart';
+import 'RepsList.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -22,6 +23,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Future<List<Representative>> futureReps;
+  late Future<List<Representative>> futureYourReps;
   late Future<List<Bill>> futureBills;
 
   void fetchRepProfile(){
@@ -31,7 +33,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
 
     super.initState();
-    futureReps = fetchYourReps();
+    futureReps = fetchReps(); // set futureReps to the function that returns a list of reps
+    futureYourReps = fetchYourReps();
     futureBills = fetchLatestBills();
   }
   Future<List<Bill>> fetchLatestBills() async {
@@ -89,8 +92,33 @@ class _HomePageState extends State<HomePage> {
       List<Representative> reps = repList
           .map(
             (dynamic item) => Representative.fromJson(item),
-      )
-          .toList();
+          ).toList();
+
+      return reps;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load reps');
+    }
+  }
+  Future<List<Representative>> fetchReps() async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'X-API-Key' : 'V2q4gUN0KXw5Ew1Wl29Z2Av5Y39EjME7VFXj2d2c'
+    };
+    final response = await http.get(
+      Uri.parse('https://api.propublica.org/congress/v1/116/senate/members.json'),
+      // Send authorization headers to the backend.
+      headers: requestHeaders,
+    );
+    if (response.statusCode == 200) {
+
+      final body = jsonDecode(response.body);
+      List<dynamic> repList  = body['results'][0]['members'];
+      List<Representative> reps = repList
+          .map(
+            (dynamic item) => Representative.fromJson(item),
+      ).toList();
 
       return reps;
     } else {
@@ -104,6 +132,14 @@ class _HomePageState extends State<HomePage> {
       MaterialPageRoute<void>(
         fullscreenDialog: true,
         builder: (context) => BillList(auth: widget.auth, futureBills: futureBills,),
+      ),
+    );
+  }
+  void _showRepsList(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => RepsList(auth: widget.auth, futureReps: futureReps,),
       ),
     );
   }
@@ -126,8 +162,9 @@ class _HomePageState extends State<HomePage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 10),
             FutureBuilder<List<Representative>>(
-                future: futureReps,
+                future: futureYourReps,
                 builder: (BuildContext context, AsyncSnapshot<List<Representative>> snapshot) {
                   if (snapshot.hasData) {
                     List<Representative>? reps = snapshot.data;
@@ -137,6 +174,16 @@ class _HomePageState extends State<HomePage> {
 
                           const Text("Your Reps",style: TextStyle(fontSize: 20),),
                           const SizedBox(height: 10),
+                          RichText(
+                              text: TextSpan(text:"See All",
+                                style: TextStyle(fontSize: 10, color: Colors.blue),
+                                recognizer: new TapGestureRecognizer()
+                                  ..onTap = () {
+                                    _showRepsList(context);
+                                  },
+
+                              )
+                          ),
                           Row(
                             children: reps!
                                 .map(
@@ -162,7 +209,6 @@ class _HomePageState extends State<HomePage> {
                   }
                 }
             ),
-            const SizedBox(height: 10),
             FutureBuilder<List<Bill>>(
                 future: futureBills,
                 builder: (BuildContext context, AsyncSnapshot<List<Bill>> snapshot) {

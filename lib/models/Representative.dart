@@ -24,13 +24,13 @@ class Representative {
   );
 
   factory Representative.fromJson(Map<String, dynamic> json) {
-    Representative val = Representative('id','name');
+    Representative val = Representative(json['id'],json['last_name']);
     try{
       val = Representative(
           json['id'],
           json['name'],
           json['role'] ?? '',
-         json['gender'] ?? '',
+          json['gender'] ?? '',
           json['party'] ?? '',
           json['twitter_id'] ?? '',
           json['facebook_account'] ?? '',

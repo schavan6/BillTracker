@@ -239,7 +239,6 @@ class _BillListState extends State<BillList> {
                                               icon: const Icon(Icons.comment,
                                                       size: 15)
                                           )
-
                                         ],
                                       )
                                     ])))
