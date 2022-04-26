@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bill_tracker/app/UserProfile.dart';
 import 'package:bill_tracker/models/Representative.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -152,6 +153,15 @@ class _HomePageState extends State<HomePage> {
       throw Exception('Failed to load reps');
     }
   }
+  void _showUserProfile(){
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (context) => UserProfile(auth: widget.auth),
+      ),
+    );
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                     icon: const Icon(Icons.first_page, size: 30)),
                 Text("BillTracker"),
                 IconButton(
-                    onPressed: () => {},
+                    onPressed: () => {_showUserProfile()},
                     icon: const Icon(Icons.person_outline_rounded, size: 30)),
 
               ],
